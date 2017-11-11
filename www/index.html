@@ -282,7 +282,7 @@ $(document).ready(function()
             id: 'O'
     }],
 		exporting: {
-		  enabled: true,
+		  enabled: false,
       csv: {
         dateFormat: '%d/%m/%Y %I:%M:%S %p'
         }
@@ -485,7 +485,7 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
                     <!-- Scrollable page content -->
                     <div class="page-content">
                         <div class="content-block">
-                            <p>    <div id="chart-container" style="position: relative; top: 10%px;"><br>
+                            <p>    <div id="chart-container" style="position: fixed; top: 60px; left: 10px; right: 10px; bottom: 60px;"><br>
       <br>
     </div>
     <div id="below chart" style="display: none;"> <button style="width: 89px; margin-top: -18px;" value="Hide All"
