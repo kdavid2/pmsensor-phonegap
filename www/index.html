@@ -7,6 +7,39 @@
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
     <!--<script src="https://rawgithub.com/highslide-software/export-csv/master/export-csv.js"></script>-->
+    <script>
+	function checkstatus() {
+			var $output = $(".kostas");
+	        $.get("http://www.kdavid.tk/readonlinestate.php", function(data, status){
+	            //alert("Data: " + data + "\nStatus: " + status);
+	            $output.removeClass("offline-status");
+	            $output.removeClass("online-status");
+	            if(data == 0) {
+	            	$output.addClass("offline-status").html("Offline");
+	            }
+	            else
+	            {
+	            	$output.addClass("online-status").html("Online");
+	            }
+	        });
+	}
+</script>
+    <script>
+	$(document).ready(function(){
+	    $$('#turnon').on('click', function(){
+	        $.get("http://www.kdavid.tk/updatepm.php?pm=1", function(data, status){
+	            alert("Data: " + data + "\nStatus: " + status);
+	        });
+	    });
+	});
+		$(document).ready(function(){
+		    $$('#turnoff').on('click', function(){
+		        $.get("http://www.kdavid.tk/updatepm.php?pm=0", function(data, status){
+		            alert("Data: " + data + "\nStatus: " + status);
+		        });
+		    });
+	});
+</script>
     <script type="text/javascript">
 
       // Webpage Javascript to chart multiple ThingSpeak channels on two axis with navigator, load historical data, and export cvs data.
@@ -444,9 +477,10 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
 
     <link rel="stylesheet" href="css/styles.css">
+
 </head>
 
-<body>
+<body onload="setInterval(checkstatus, 3000);">
     <!-- Status bar overlay for full screen mode (PhoneGap) -->
     <div class="statusbar-overlay"></div>
 
@@ -484,9 +518,11 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
                     <!-- Scrollable page content -->
                     <div class="page-content">
                         <div class="content-block">
-                            <p>    <div id="chart-container" style="position: fixed; top: 60px; left: 10px; right: 10px; bottom: 60px;"><br>
+                            <p>    <div id="chart-container" style="position: fixed; top: 60px; left: 10px; right: 10px; bottom: 120px;"><br>
       <br>
     </div>
+    <div style="position: fixed; bottom: 70px; left: 10px;"><a href="#" class="button button-big button-fill button-raised color-green" id="turnon">turnon</a></div>
+    <div style="position: fixed; bottom: 70px; right: 10px;"><a href="#" class="button button-big button-fill button-raised color-pink" id="turnoff">turnoff</a></div>
     <div id="below chart" style="display: none;"> <button style="width: 89px; margin-top: -18px;" value="Hide All"
         name="Hide All Button"
         onclick="HideAll();">Hide
@@ -528,7 +564,7 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
             <div class="toolbar">
                 <div class="toolbar-inner">
                     <!-- Toolbar links -->
-                    <a href="#" class="link">Home</a>
+                    <div class="link kostas status">Checking state...</div>
                     <a href="about.html" class="link">About</a>
                 </div>
             </div>

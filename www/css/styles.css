@@ -30,3 +30,29 @@ input
 -ms-user-select: auto !important;
 user-select: auto !important;
 }
+
+.status {
+	position: relative;
+	padding-left: 18px;
+}
+
+.status:before {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	content: "";
+	width: 10px;
+	height: 10px;
+	border-radius: 5px;
+	margin-top: -5px;
+	background-color: gray;
+}
+
+.status.online-status:before {
+	background-color: green;
+}
+
+
+.status.offline-status:before {
+	background-color: red;
+}
