@@ -10,31 +10,46 @@
     <script>
 	function checkstatus() {
 			var $output = $(".kostas");
-	        $.get("http://www.kdavid.tk/readonlinestate.php", function(data, status){
+			var $data1;
+	        $.get("http://www.kdavid.tk/pmsensor/readonlinestate.php", function(data, status){
 	            //alert("Data: " + data + "\nStatus: " + status);
+	            data1 = data;
 	            $output.removeClass("offline-status");
 	            $output.removeClass("online-status");
-	            if(data == 0) {
-	            	$output.addClass("offline-status").html("Offline");
+	            if(data < 30) {
+	            	$output.addClass("online-status").html("Online");
 	            }
 	            else
 	            {
-	            	$output.addClass("online-status").html("Online");
+	            	$output.addClass("offline-status").html("Offline");
+	            	$(".fan").html("<img src=\"fanOFF.gif\">");
 	            }
 	        });
+	        $.get("http://www.kdavid.tk/pmsensor/readfanstate.php", function(data2, status){
+	            //alert("Data: " + data + "\nStatus: " + status);
+	            if(data2 == "1" && data1 < 30) {
+	            	$(".fan").html("<img src=\"fanON.gif\">");
+	            }
+	            else
+	            {
+	            	$(".fan").html("<img src=\"fanOFF.gif\">");
+	            }
+	        });
+
 	}
 </script>
     <script>
 	$(document).ready(function(){
 	    $$('#turnon').on('click', function(){
-	        $.get("http://www.kdavid.tk/updatepm.php?pm=1", function(data, status){
+	        $.get("http://www.kdavid.tk/pmsensor/fancommand.php?fancommand=1", function(data, status){
 	            alert("Data: " + data + "\nStatus: " + status);
+
 	        });
 	    });
 	});
 		$(document).ready(function(){
 		    $$('#turnoff').on('click', function(){
-		        $.get("http://www.kdavid.tk/updatepm.php?pm=0", function(data, status){
+		        $.get("http://www.kdavid.tk/pmsensor/fancommand.php?fancommand=0", function(data, status){
 		            alert("Data: " + data + "\nStatus: " + status);
 		        });
 		    });
@@ -480,7 +495,7 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
 
 </head>
 
-<body onload="setInterval(checkstatus, 3000);">
+<body onload="setInterval(checkstatus, 10000);">
     <!-- Status bar overlay for full screen mode (PhoneGap) -->
     <div class="statusbar-overlay"></div>
 
@@ -521,8 +536,9 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
                             <p>    <div id="chart-container" style="position: fixed; top: 60px; left: 10px; right: 10px; bottom: 120px;"><br>
       <br>
     </div>
-    <div style="position: fixed; bottom: 70px; left: 10px;"><a href="#" class="button button-big button-fill button-raised color-green" id="turnon">turnon</a></div>
-    <div style="position: fixed; bottom: 70px; right: 10px;"><a href="#" class="button button-big button-fill button-raised color-pink" id="turnoff">turnoff</a></div>
+    <div style="position: fixed; bottom: 70px; left: 10px;"><a href="#" class="button button-big button-fill button-raised color-green" id="turnon">Start fan</a></div>
+    <div class="fan" style="position: fixed; bottom: 65px; right: 50%; margin-right: -22px;"><img src="fanOFF.gif"></div>
+    <div style="position: fixed; bottom: 70px; right: 10px;"><a href="#" class="button button-big button-fill button-raised color-pink" id="turnoff">Stop fan</a></div>
     <div id="below chart" style="display: none;"> <button style="width: 89px; margin-top: -18px;" value="Hide All"
         name="Hide All Button"
         onclick="HideAll();">Hide
