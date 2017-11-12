@@ -6,7 +6,7 @@
      type="text/javascript"></script>-->
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
-    <script src="https://rawgithub.com/highslide-software/export-csv/master/export-csv.js"></script>
+    <!--<script src="https://rawgithub.com/highslide-software/export-csv/master/export-csv.js"></script>-->
     <script type="text/javascript">
 
       // Webpage Javascript to chart multiple ThingSpeak channels on two axis with navigator, load historical data, and export cvs data.
@@ -14,6 +14,7 @@
       //  The charting library is called HighStock.  It is awesome!  HighSoft, the owners say,
       //   "Do you want to use Highstock for a personal or non-profit project? Then you can use Highchcarts for
       //   free under the  Creative Commons Attribution-NonCommercial 3.0 License. "
+
 var dynamicChart;
 var channelsLoaded = 0;
 // put your ThingSpeak Channel#, Channel Name, and API keys here.
@@ -187,15 +188,15 @@ $(document).ready(function()
 			buttons: [{
 				count: 1,
 				type: 'minute',
-				text: 'Live'
+				text: '1m'
 			}, {
 				count: 30,
 				type: 'minute',
-				text: '30M'
+				text: '30m'
 			}, {
 				count: 12,
 				type: 'hour',
-				text: '12H'
+				text: '12h'
       }, {
 				count: 1,
 				type: 'day',
@@ -203,11 +204,11 @@ $(document).ready(function()
       }, {
 				count: 1,
 				type: 'week',
-				text: 'W'
+				text: '1w'
       }, {
 				count: 1,
 				type: 'month',
-				text: 'M'
+				text: '1mo'
       }, {
 				count: 1,
 				type: 'year',
@@ -222,6 +223,9 @@ $(document).ready(function()
     title: {
 			text: ''
 		},
+		scrollbar: {
+		            enabled: true
+        },
 		plotOptions: {
 		  line: {
         gapSize:5
@@ -278,7 +282,7 @@ $(document).ready(function()
             id: 'O'
     }],
 		exporting: {
-		  enabled: true,
+		  enabled: false,
       csv: {
         dateFormat: '%d/%m/%Y %I:%M:%S %p'
         }
@@ -287,6 +291,7 @@ $(document).ready(function()
 		  enabled: true
 		},
     navigator: {
+      enabled: false,
       baseSeries: 0,  //select which series to show in history navigator, First series is 0
       series: {
             includeInCSVExport: false
@@ -419,7 +424,6 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
 
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -476,14 +480,14 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
             <!-- Pages container, because we use fixed-through navbar and toolbar, it has additional appropriate classes-->
             <div class="pages navbar-through toolbar-through">
                 <!-- Page, "data-page" contains page name -->
-                <div data-page="index" class="page">
+                <div data-page="index" class="page" >
                     <!-- Scrollable page content -->
-                    <div class="page-content" style="bottom: 50px;">
+                    <div class="page-content">
                         <div class="content-block">
-                            <p>    <div id="chart-container" style="height: 600px;"><br>
+                            <p>    <div id="chart-container" style="position: fixed; top: 60px; left: 10px; right: 10px; bottom: 60px;"><br>
       <br>
     </div>
-    <div id="below chart"> <button style="width: 89px; margin-top: -18px;" value="Hide All"
+    <div id="below chart" style="display: none;"> <button style="width: 89px; margin-top: -18px;" value="Hide All"
         name="Hide All Button"
         onclick="HideAll();">Hide
         All</button><button style="width: 162px; margin-top: -18px;" value="Load More Data"
@@ -515,7 +519,7 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
     </div></p>
 
                             <!-- Link to another page -->
-                            <a href="about.html">About app</a>
+                            <!-- <a href="about.html">About app</a> -->
                         </div>
                     </div>
                 </div>
@@ -524,14 +528,14 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
             <div class="toolbar">
                 <div class="toolbar-inner">
                     <!-- Toolbar links -->
-                    <a href="#" class="link">Link 1</a>
-                    <a href="#" class="link">Link 2</a>
+                    <a href="#" class="link">Home</a>
+                    <a href="about.html" class="link">About</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="cordova.js"></script>
+    <!--<script type="text/javascript" src="cordova.js"></script>-->
     <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
     <script type="text/javascript" src="js/my-app.js"></script>
 </body>

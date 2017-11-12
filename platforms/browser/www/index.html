@@ -6,7 +6,60 @@
      type="text/javascript"></script>-->
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
-    <script src="https://rawgithub.com/highslide-software/export-csv/master/export-csv.js"></script>
+    <!--<script src="https://rawgithub.com/highslide-software/export-csv/master/export-csv.js"></script>-->
+    <script>
+	function checkstatus() {
+			var $output = $(".kostas");
+			var $data1;
+	        $.get("http://www.kdavid.tk/pmsensor/readonlinestate.php", function(data, status){
+	            //alert("Data: " + data + "\nStatus: " + status);
+	            data1 = data;
+	            $output.removeClass("offline-status");
+	            $output.removeClass("online-status");
+	            if(data < 30) {
+	            	$output.addClass("online-status").html("Online");
+	            }
+	            else
+	            {
+	            	$output.addClass("offline-status").html("Offline");
+	            	$(".fan").html("<img src=\"fanOFF.gif\">");
+	            }
+	        });
+	        $.get("http://www.kdavid.tk/pmsensor/readfanstate.php", function(data2, status){
+	            //alert("Data: " + data + "\nStatus: " + status);
+	            if(data2 == "1" && data1 < 30) {
+	            	$(".fan").html("<img src=\"fanON.gif\">");
+	            }
+	            else
+	            {
+	            	$(".fan").html("<img src=\"fanOFF.gif\">");
+	            }
+	        });
+
+	}
+</script>
+    <script>
+	$(document).ready(function(){
+	    $$('#turnon').on('click', function(){
+	        $.get("http://www.kdavid.tk/pmsensor/fancommand.php?fancommand=1", function(data, status){
+	            if(status == "success") {
+					alert("Command to turn on the fan has been successfully sent.\nPlease wait some seconds and notice the fan icon.");
+	            }
+	            //alert("Data: " + data + "\nStatus: " + status);
+
+	        });
+	    });
+	});
+		$(document).ready(function(){
+		    $$('#turnoff').on('click', function(){
+		        $.get("http://www.kdavid.tk/pmsensor/fancommand.php?fancommand=0", function(data, status){
+	            if(status == "success") {
+					alert("Command to turn off the fan has been successfully sent.\nPlease wait some seconds and notice the fan icon.");
+	            }
+		        });
+		    });
+	});
+</script>
     <script type="text/javascript">
 
       // Webpage Javascript to chart multiple ThingSpeak channels on two axis with navigator, load historical data, and export cvs data.
@@ -188,15 +241,15 @@ $(document).ready(function()
 			buttons: [{
 				count: 1,
 				type: 'minute',
-				text: 'Live'
+				text: '1m'
 			}, {
 				count: 30,
 				type: 'minute',
-				text: '30M'
+				text: '30m'
 			}, {
 				count: 12,
 				type: 'hour',
-				text: '12H'
+				text: '12h'
       }, {
 				count: 1,
 				type: 'day',
@@ -204,11 +257,11 @@ $(document).ready(function()
       }, {
 				count: 1,
 				type: 'week',
-				text: 'W'
+				text: '1w'
       }, {
 				count: 1,
 				type: 'month',
-				text: 'M'
+				text: '1mo'
       }, {
 				count: 1,
 				type: 'year',
@@ -282,7 +335,7 @@ $(document).ready(function()
             id: 'O'
     }],
 		exporting: {
-		  enabled: true,
+		  enabled: false,
       csv: {
         dateFormat: '%d/%m/%Y %I:%M:%S %p'
         }
@@ -424,7 +477,6 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
 
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -445,9 +497,10 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
 
     <link rel="stylesheet" href="css/styles.css">
+
 </head>
 
-<body>
+<body onload="setInterval(checkstatus, 10000);">
     <!-- Status bar overlay for full screen mode (PhoneGap) -->
     <div class="statusbar-overlay"></div>
 
@@ -485,9 +538,12 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
                     <!-- Scrollable page content -->
                     <div class="page-content">
                         <div class="content-block">
-                            <p>    <div id="chart-container" style="position: relative; top: 10%px;"><br>
+                            <p>    <div id="chart-container" style="position: fixed; top: 60px; left: 10px; right: 10px; bottom: 120px;"><br>
       <br>
     </div>
+    <div style="position: fixed; bottom: 70px; left: 10px;"><a href="#" class="button button-big button-fill button-raised color-green" id="turnon">Start fan</a></div>
+    <div class="fan" style="position: fixed; bottom: 65px; right: 50%; margin-right: -22px;"><img src="fanOFF.gif"></div>
+    <div style="position: fixed; bottom: 70px; right: 10px;"><a href="#" class="button button-big button-fill button-raised color-pink" id="turnoff">Stop fan</a></div>
     <div id="below chart" style="display: none;"> <button style="width: 89px; margin-top: -18px;" value="Hide All"
         name="Hide All Button"
         onclick="HideAll();">Hide
@@ -520,7 +576,7 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
     </div></p>
 
                             <!-- Link to another page -->
-                            <a href="about.html">About app</a>
+                            <!-- <a href="about.html">About app</a> -->
                         </div>
                     </div>
                 </div>
@@ -529,14 +585,14 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
             <div class="toolbar">
                 <div class="toolbar-inner">
                     <!-- Toolbar links -->
-                    <a href="#" class="link">Link 1</a>
-                    <a href="#" class="link">Link 2</a>
+                    <div class="link kostas status">Checking state...</div>
+                    <a href="about.html" class="link">About</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="cordova.js"></script>
+    <!--<script type="text/javascript" src="cordova.js"></script>-->
     <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
     <script type="text/javascript" src="js/my-app.js"></script>
 </body>

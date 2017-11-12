@@ -42,7 +42,10 @@
 	$(document).ready(function(){
 	    $$('#turnon').on('click', function(){
 	        $.get("http://www.kdavid.tk/pmsensor/fancommand.php?fancommand=1", function(data, status){
-	            alert("Data: " + data + "\nStatus: " + status);
+	            if(status == "success") {
+					alert("Command to turn on the fan has been successfully sent.\nPlease wait some seconds and notice the fan icon.");
+	            }
+	            //alert("Data: " + data + "\nStatus: " + status);
 
 	        });
 	    });
@@ -50,7 +53,9 @@
 		$(document).ready(function(){
 		    $$('#turnoff').on('click', function(){
 		        $.get("http://www.kdavid.tk/pmsensor/fancommand.php?fancommand=0", function(data, status){
-		            alert("Data: " + data + "\nStatus: " + status);
+	            if(status == "success") {
+					alert("Command to turn off the fan has been successfully sent.\nPlease wait some seconds and notice the fan icon.");
+	            }
 		        });
 		    });
 	});
