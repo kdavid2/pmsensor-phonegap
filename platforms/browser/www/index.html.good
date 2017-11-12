@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <!--<script src="https://www.thingspeak.com/assets/application-927d1479ab2235e91ae25cb56d33b211.js"
      type="text/javascript"></script>-->
-    <script src="js/highstock.js"></script>
-    <script src="js/exporting.js"></script>
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
     <!--<script src="https://rawgithub.com/highslide-software/export-csv/master/export-csv.js"></script>-->
     <script>
 	function checkstatus() {
 			var $output = $(".kostas");
-			var $data1 = 0;
+			var $data1;
 	        $.get("http://www.kdavid.tk/pmsensor/readonlinestate.php", function(data, status){
 	            //alert("Data: " + data + "\nStatus: " + status);
 	            data1 = data;
@@ -526,8 +526,8 @@ function loadChannelHistory(sentChannelIndex,channelNumber,key,sentFieldList,sen
                         <!--
                           Right link contains only icon - additional "icon-only" class
                           Additional "open-panel" class tells app to open panel when we click on this link
-
-                        <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>-->
+                        -->
+                        <a href="#" class="link icon-only open-panel"><i class="icon icon-bars"></i></a>
                     </div>
                 </div>
             </div>
